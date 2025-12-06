@@ -17,4 +17,43 @@ services:
     networks:
       - mysql_network
 networks:
-  mysql_network:
+   mysql_network:
+
+
+# # ------------------------------------
+# # 2. SERVICIO DE LA APLICACIÓN (NESTJS)
+# # ------------------------------------
+#   app:
+#     # 👈 Indica que debe construir la imagen usando el Dockerfile en la carpeta actual
+#     build:
+#       context: . 
+#       dockerfile: Dockerfile
+    
+#     # Mapea el puerto del contenedor (3000) al host (3000)
+#     ports:
+#       - "3000:3000" 
+      
+#     # Asegura que el servicio 'db' esté listo antes de intentar iniciar la app
+#     depends_on:
+#       - db 
+      
+#     # 👈 Variables de entorno para que NestJS sepa cómo conectarse a la DB
+#     environment:
+#       # NOTA: Usar 'db' aquí es clave, ya que es el nombre del servicio DB
+#       DATABASE_HOST: db 
+#       DATABASE_PORT: 3306
+#       DATABASE_USERNAME: ${DB_USER} 
+#       #DATABASE_USERNAME: user_name 
+#       DATABASE_PASSWORD: ${DB_PASSWORD}
+#       DATABASE_NAME: ${DB_NAME}
+      
+#     container_name: nestjs_app
+#     networks:
+#       - mysql_network
+
+# networks:
+#   mysql_network:
+#   # Para desarrollo, útil para ver cambios sin reconstruir la imagen
+#   # volumes:
+#   #   - .:/usr/src/app
+#   #   - /usr/src/app/node_modules

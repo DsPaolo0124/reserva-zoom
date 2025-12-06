@@ -9,6 +9,7 @@ import { Forms_temp } from './entities/forms_temp.entity';
 import { create } from 'domain';
 import { Reserva_aprobada } from './entities/reservas_aprobadas.entity';
 import { CreateReserva_AprobadaDto } from './dto/create-reserva_aprobada.dto';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class ReservaService {
@@ -63,10 +64,6 @@ export class ReservaService {
 
   async createReserva_Aprobada(createReserva_AprobadaDto:CreateReserva_AprobadaDto){
     try {
-      
-      
-
-
       const reserva_aprobada = await this.reserva_aprobadaRepository.create({
         ...createReserva_AprobadaDto,
         // estado: 'APROBADA',
@@ -74,11 +71,11 @@ export class ReservaService {
         id_reservas: {id_reservas: createReserva_AprobadaDto.id_reservas}
       });
       await this.reserva_aprobadaRepository.save(reserva_aprobada);
+      //procedemmos a actualizar el estado de la reserva en la tabla reservas con el mismo estado que se envio
+      await this.reservaRepository.update(createReserva_AprobadaDto.id_reservas, {
+        estado: createReserva_AprobadaDto.estado
+      });
 
-      // realizar el fill one primero
-      // const {id_reservas}= createReserva_AprobadaDto;
-
-      // await this.update(id_reservas,...Update);
 
     return {
       message: `Reserva ${createReserva_AprobadaDto.estado} correctamente`,
@@ -117,8 +114,17 @@ export class ReservaService {
     });
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} reserva`;
+  async findOne(id: string) {
+
+    let reserva: Reservas | null=null;
+
+    if (!reserva && isUUID(id)){
+      reserva = await this.reservaRepository.findOneBy({id_reservas: id});
+    }else{
+      return `Reserva con ID: ${id} no encontrada`;
+    }
+    return reserva;
+    
   }
 
   async update(id: string, updateReservaDto: UpdateReservaDto) {

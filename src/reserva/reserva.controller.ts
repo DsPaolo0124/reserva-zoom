@@ -33,7 +33,8 @@ export class ReservaController {
     return this.reservaService.ListarReservasEliminadas();
   }
 
-  @Get(':id')
+  // @Get(':id')
+  @Get('Buscar_reserva/:id')
   findOne(@Param('id',ParseUUIDPipe) id: string) {
     return this.reservaService.findOne(id);
   }
